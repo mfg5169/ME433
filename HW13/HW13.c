@@ -10,6 +10,9 @@
 #define I2C_SCL 17
 
 
+#define I2CLED_PORT i2c1
+#define I2CLED_SDA 16
+#define I2CLED_SCL 17
 // config registers
 #define CONFIG 0x1A
 #define GYRO_CONFIG 0x1B
@@ -65,7 +68,7 @@ void imu_init()
     printf("IMU init done\n");
 }
 
-void imu_read_data(char label)
+int16_t[] imu_read_data(char label)
 {
     uint8_t data[12];
     uint8_t addresses[12] = {
@@ -98,6 +101,8 @@ void imu_read_data(char label)
     int16_t gyro_z  = (data[11] << 8) | data[10];
     printf("Accel X: %d, Y: %d, Z: %d | Gyro X: %d, Y: %d, Z: %d\n", accel_x, accel_y, accel_z, gyro_x, gyro_y, gyro_z);
     
+
+    return {accel_x, accel_y, accel_z, gyro_x, gyro_y, gyro_z};
     
     // Write to CSV file with headers if file is new
     
@@ -119,7 +124,27 @@ void imu_read_data(char label)
 
 
 }
+void sketchvector(float x_accel, float y_accel){
+    ssd1306_clear();
+    ssd1306_drawPixel(60, 15, 1); // around the middle of the screen
+    ssd1306_update();
+    // Use descriptive variable names and combine logic for efficiency
+    int x_center = 60;
+    int y_center = 15;
+    int x_length = (int)(30.0f * fabsf(x_accel));
+    int y_length = (int)(10.0f * fabsf(y_accel));
 
+    int x_dir = (x_accel >= 0.0f) ? -1 : 1;
+    int y_dir = (y_accel >= 0.0f) ? 1 : -1;
+
+    for (int i = 0; i < x_length; i++) {
+        ssd1306_drawPixel(x_center + i * x_dir, y_center, 1);
+    }
+    for (int j = 0; j < y_length; j++) {
+        ssd1306_drawPixel(x_center, y_center + j * y_dir, 1);
+    }
+    ssd1306_update();
+}
 int main()
 {
     stdio_init_all();
@@ -135,11 +160,19 @@ int main()
     gpio_set_function(I2C_SCL, GPIO_FUNC_I2C);
     gpio_pull_up(I2C_SDA);
     gpio_pull_up(I2C_SCL);
+
+    i2c_init(I2CLED_PORT, 400*1000);
+
+    gpio_set_function(I2CLED_SCL, GPIO_FUNC_I2C);
+    gpio_set_function(I2CLED_SDA, GPIO_FUNC_I2C);
+    gpio_pull_up(I2CLED_SCL);
+    gpio_pull_up(I2CLED_SDA);
     // For more examples of I2C use see https://github.com/raspberrypi/pico-examples/tree/master/i2c
 
 
 
     t_start = to_us_since_boot(get_absolute_time());
+    uint16_t accel_x, accel_y, accel_z, gyro_x, gyro_y, gyro_z;
     while (true) {
         sleep_ms(5000);
         printf("Hello, world!\n");
@@ -152,7 +185,8 @@ int main()
         //     label = (char)c;
         // }
         char label = '1'; // default label
-        imu_read_data(label);
+        accel_x, accel_y, accel_z, gyro_x, gyro_y, gyro_z = imu_read_data(label);
+        sketchvector((float)accel_x / 16384.0f, (float)accel_y / 16384.0f); 
         
     }
 }

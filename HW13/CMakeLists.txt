@@ -28,35 +28,34 @@ set(PICO_BOARD pico2 CACHE STRING "Board type")
 # Pull in Raspberry Pi Pico SDK (must be before project)
 include(pico_sdk_import.cmake)
 
-project(IMU_read_data C CXX ASM)
+project(HW13 C CXX ASM)
 
 # Initialise the Raspberry Pi Pico SDK
 pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(IMU_read_data IMU_read_data.c )
+add_executable(HW13 HW13.c helper.c ssd1306.c display.c)
 
-pico_set_program_name(IMU_read_data "IMU_read_data")
-pico_set_program_version(IMU_read_data "0.1")
+pico_set_program_name(HW13 "HW13")
+pico_set_program_version(HW13 "0.1")
 
 # Modify the below lines to enable/disable output over UART/USB
-pico_enable_stdio_uart(IMU_read_data 0)
-pico_enable_stdio_usb(IMU_read_data 1)
+pico_enable_stdio_uart(HW13 0)
+pico_enable_stdio_usb(HW13 1)
 
 # Add the standard library to the build
-target_link_libraries(IMU_read_data
+target_link_libraries(HW13
         pico_stdlib)
 
 # Add the standard include files to the build
-target_include_directories(IMU_read_data PRIVATE
+target_include_directories(HW13 PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}
 )
 
 # Add any user requested libraries
-target_link_libraries(IMU_read_data 
+target_link_libraries(HW13 
         hardware_i2c
         )
 
-pico_add_extra_outputs(IMU_read_data)
-
+pico_add_extra_outputs(HW13)
