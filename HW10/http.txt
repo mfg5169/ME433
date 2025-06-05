@@ -1,0 +1,12 @@
+
+ndm736
+
+wget https://raw.githubusercontent.com/<user>/<repo>/<branch>/<path-to-file>
+
+wget https://raw.githubusercontent.com/ndm736/ME433_2025/main/dsp/SigA.csv
+
+wget https://raw.githubusercontent.com/ndm736/ME433_2025/main/dsp/sigA.csv
+wget https://raw.githubusercontent.com/ndm736/ME433_2025/main/dsp/sigA.csv
+
+
+https://github.com/
