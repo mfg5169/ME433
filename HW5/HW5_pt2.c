@@ -14,9 +14,7 @@
 #define PIN_MOSI 19
 
 #define PIN_RAM_CS 5
-#define PIN_RAM_MISO 4
-#define PIN_RAM_SCK 2
-#define PIN_RAM_MOSI 3
+
 
 
 
@@ -155,6 +153,7 @@ uint16_t writetoRAM(uint16_t address, uint32_t *data, size_t len){
 
 uint32_t* readfromRAM(uint16_t address) {
     uint8_t read_command = 0x03;
+
     static uint32_t data[400]; // Use static to persist after function returns
 
     cs_select(PIN_RAM_CS);
@@ -249,8 +248,6 @@ int main()
         // adc_gpio_init(26); // set ADC0 pin to be adc input instead of GPIO
         // adc_select_input(0); // select to read from ADC0
 
-
-
     // Generate 400 samples of a sine wave and store as uint32_t (float bits)
     for (uint t = 0; t < 1000; t++) {
         v0 = 1.65 * sinf(2 * M_PI * f * t / 1000.0f) + 1.65;
@@ -264,12 +261,13 @@ int main()
     address = writetoRAM(address, v, 1000); // Write the data to RAM
     printf("Data written to RAM at address: 0x%04X\n", address);
     // Read the data back from RAM
-    uint32_t *read_data = readfromRAM(address); // Read the data from RAM
+
     printf("Data read from RAM: \n");
     
     for (int i = 0; i < 1000; i++) {
         printf("Value %d: %f\n", i, read_data[i]);
     }
+    uint32_t *read_data = readfromRAM(address); // Read the data from RAM
     // Write to DAC
     for (int i = 0; i < 1000; i++) {
         writeDAC(0, int_to_float(read_data[i])); // Write each value to DAC channel 0
