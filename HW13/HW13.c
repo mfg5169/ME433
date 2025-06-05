@@ -186,6 +186,7 @@ int main()
         // }
         char label = '1'; // default label
         accel_x, accel_y, accel_z, gyro_x, gyro_y, gyro_z = imu_read_data(label);
+        printf("Accel X: %d, Y: %d, Z: %d | Gyro X: %d, Y: %d, Z: %d\n", accel_x, accel_y, accel_z, gyro_x, gyro_y, gyro_z);
         sketchvector((float)accel_x / 16384.0f, (float)accel_y / 16384.0f); 
         
     }
