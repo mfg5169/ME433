@@ -92,7 +92,7 @@ int main()
         for(int j = 0; j < 1000; j++)
         {
    
-            uint16_t = adc_read();
+            uint16_t adcV= adc_read();
             float V = adcV*(3.3/4095.0);
             sprintf(message, "Pot. Read: %.4f V", V);
             printf("ADC %d: %f V\n", j, V);
