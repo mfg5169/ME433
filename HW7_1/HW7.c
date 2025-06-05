@@ -94,7 +94,7 @@ int main()
    
             uint16_t = adc_read();
             float V = adcV*(3.3/4095.0);
-            sprintf(message, " ADC Read: %0.2f V", V);
+            sprintf(message, "Pot. Read: %.4f V", V);
             printf("ADC %d: %f V\n", j, V);
             // printf("Enter an integer: ");
             // scanf("%d", &i); // read an integer from the user
